@@ -32,6 +32,7 @@ messages = {
         "listen": "🎧 Слушать",
         "return_menu": "🔙 Вернуться в меню",
         "request_canceled_story": "Запрос был отменен. Пожалуйста, введите тему заново.",
+        "top_story": "Вот интересные сказки топ-3:"
     },
     'en': {
         'welcome': "Hello, {user_name}! 🎉\n\n"
@@ -66,6 +67,8 @@ Remember, I’m always here to help! 😊''',
         "listen": "🎧 Listen",
         "return_menu": "🔙 Return to menu",
         "request_canceled_story": "The request was canceled. Please enter the theme again.",
+        "top_story": "Here are the top 3 interesting tales:"
+
     },
     'kgz': {
         'welcome': "Салам, {user_name}! 🎉\n\n"
@@ -100,6 +103,7 @@ Remember, I’m always here to help! 😊''',
         "listen": "🎧 Угуу",
         "return_menu": "🔙 Башкы менюга кайтуу",
         "request_canceled_story": "Сураныч, жоюлду. Жаңы теманы киргизиңиз.",
+        "top_story":"Эң кызыктуу жомоктордун топ-3:"
     }
 }
 

@@ -1,3 +1,5 @@
+from random import random
+
 from aiogram import F, types, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -70,6 +72,50 @@ async def process_story_text(message: types.Message, state: FSMContext) -> None:
         await message.answer(messages[language]["request_canceled_story"], reply_markup=keyboard.adjust(1).as_markup())
 
 
+@tale_functions_private_router.callback_query(F.data.startswith("view_top_stories"))
+async def view_top_stories(query: types.CallbackQuery, state: FSMContext) -> None:
+    user_id = query.from_user.id
+    language = user_preferences.get(user_id, {}).get('language', 'ru')
+    if language == 'en':
+        topics = [
+            "Путешествие во времени",
+            "Мифы и легенды",
+            "Инопланетные цивилизации",
+            "Секретные агенты",
+            "Таинственные исчезновения",
+            "Герои и суперспособности",
+            "Открытия великих учёных",
+            "Космические экспедиции",
+            "Городские легенды и страшилки",
+            "Философские притчи"
+        ]
+    else :
+        topics = [
+            "Time Travel Adventures",
+            "Myths and Legends",
+            "Alien Civilizations",
+            "Secret Agents",
+            "Mysterious Disappearances",
+            "Heroes and Superpowers",
+            "Great Scientific Discoveries",
+            "Space Expeditions",
+            "Urban Legends and Ghost Stories",
+            "Philosophical Parables"
+        ]
+
+    top_3_stories = random.sample(topics, 3)
+    for story in top_3_stories:
+        generated_story = sent_prompt_and_get_response(story, language)
+        keyboard = InlineKeyboardBuilder()
+        keyboard.add(InlineKeyboardButton(text=messages[language]['listen'], callback_data='listen'))
+        await query.message.answer(text=generated_story, reply_markup=keyboard.adjust(1).as_markup())
+    await query.message.answer(messages[language]['top_story'],reply_markup=start_functions_keyboard(language))
+
+
 @tale_functions_private_router.callback_query(F.data.startswith("listen"))
 async def listen_story(query: types.CallbackQuery, state: FSMContext) -> None:
     await query.message.answer('🚧 Эта команда пока недоступна. Вернитесь в меню /start 😊')
+
+
+
+
