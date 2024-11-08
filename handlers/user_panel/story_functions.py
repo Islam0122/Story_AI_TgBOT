@@ -1,4 +1,4 @@
-from random import random
+import random
 
 from aiogram import F, types, Router
 from aiogram.fsm.context import FSMContext
@@ -6,7 +6,8 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from keyboard.inline import start_functions_keyboard, get_cancel_story_keyboard
+from keyboard.inline import start_functions_keyboard, get_cancel_story_keyboard, return_menu_keyboard, \
+    return_start_keyboard
 from message_text.text import messages, button_texts, cancel
 from .start_functions import user_preferences
 from .tale_ai_function import *
@@ -103,15 +104,16 @@ async def view_top_stories(query: types.CallbackQuery, state: FSMContext) -> Non
             "Philosophical Parables"
         ]
 
-    top_3_stories = random.sample(topics, 3)
+    top_3_stories = random.choices(topics, k=3)  # С выбором с повторениями, если важно
+
     for story in top_3_stories:
         generated_story = sent_prompt_and_get_response(story, language)
         keyboard = InlineKeyboardBuilder()
         keyboard.add(InlineKeyboardButton(text=messages[language]['listen'], callback_data='listen'))
         await query.message.answer(text=generated_story, reply_markup=keyboard.adjust(1).as_markup())
-    await query.message.answer(messages[language]['top_story'],reply_markup=start_functions_keyboard(language))
 
-
+    # Финальное сообщение с кнопкой
+    await query.message.answer(messages[language]['top_story'], reply_markup=return_start_keyboard(language))
 @tale_functions_private_router.callback_query(F.data.startswith("listen"))
 async def listen_story(query: types.CallbackQuery, state: FSMContext) -> None:
     await query.message.answer('🚧 Эта команда пока недоступна. Вернитесь в меню /start 😊')
