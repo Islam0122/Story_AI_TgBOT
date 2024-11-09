@@ -123,8 +123,14 @@ async def listen_story(query: types.CallbackQuery, state: FSMContext) -> None:
     user_id = query.from_user.id
     language = user_preferences.get(user_id, {}).get('language', 'ru')
     await query.message.edit_text(text, reply_markup=return_start_keyboard(language))
+    wait_messages = {
+        'ru': "Пожалуйста, подождите до трёх минут. Генерируется голос...",
+        'en': "Please wait up to three minutes. Generating voice...",
+        'kgz': "Үч мүнөткө чейин күтүп туруңуз. Үн түзүлүүдө..."
+    }
+    wait_message = wait_messages.get(language, wait_messages['ru'])
+    await query.message.answer(wait_message)
 
-    # Определяем язык для TTS
     lang_code = 'en' if language == 'en' else 'ru'
     tts = gTTS(text=text, lang=lang_code)
 
