@@ -1,5 +1,6 @@
 import random
 
+from gtts import gTTS
 from aiogram import F, types, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -64,7 +65,7 @@ async def process_story_text(message: types.Message, state: FSMContext) -> None:
         keyboard = InlineKeyboardBuilder()
         keyboard.add(InlineKeyboardButton(text=messages[language]['listen'], callback_data='listen'))
         keyboard.add(InlineKeyboardButton(text=messages[language]['return_menu'], callback_data='start_'))
-        generated_story = sent_prompt_and_get_response(story_theme,language)
+        generated_story = sent_prompt_and_get_response(story_theme, language)
         await message.answer(text=generated_story, reply_markup=keyboard.adjust(1).as_markup())
         await state.clear()
     else:
@@ -90,7 +91,7 @@ async def view_top_stories(query: types.CallbackQuery, state: FSMContext) -> Non
             "Городские легенды и страшилки",
             "Философские притчи"
         ]
-    else :
+    else:
         topics = [
             "Time Travel Adventures",
             "Myths and Legends",
@@ -114,10 +115,25 @@ async def view_top_stories(query: types.CallbackQuery, state: FSMContext) -> Non
 
     # Финальное сообщение с кнопкой
     await query.message.answer(messages[language]['top_story'], reply_markup=return_start_keyboard(language))
+
+
 @tale_functions_private_router.callback_query(F.data.startswith("listen"))
 async def listen_story(query: types.CallbackQuery, state: FSMContext) -> None:
-    await query.message.answer('🚧 Эта команда пока недоступна. Вернитесь в меню /start 😊')
+    text = query.message.text
+    user_id = query.from_user.id
+    language = user_preferences.get(user_id, {}).get('language', 'ru')
+    await query.message.edit_text(text, reply_markup=return_start_keyboard(language))
 
+    # Определяем язык для TTS
+    lang_code = 'en' if language == 'en' else 'ru'
+    tts = gTTS(text=text, lang=lang_code)
 
+    # Сохраняем аудиофайл
+    file_path = f"{user_id}.mp3"
+    tts.save(file_path)
+    voice = types.FSInputFile(file_path)
 
+    await query.message.answer_voice(voice)
 
+    # Удаляем файл после отправки
+    os.remove(file_path)
