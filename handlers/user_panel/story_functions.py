@@ -30,8 +30,8 @@ async def story(query: types.CallbackQuery, state: FSMContext) -> None:
     keyboard = InlineKeyboardBuilder()
     keyboard.add(InlineKeyboardButton(text=texts['by_text'][language], callback_data='create_story_by_text'))
     keyboard.add(InlineKeyboardButton(text=texts['by_photo'][language], callback_data='create_story_by_photo'))
-    await query.message.edit_text(
-        text=texts['choose_method'][language],
+    await query.message.edit_caption(
+        caption=texts['choose_method'][language],
         reply_markup=keyboard.adjust(1).as_markup()
     )
 
@@ -85,6 +85,9 @@ async def process_story_text(message: types.Message, state: FSMContext) -> None:
         keyboard = InlineKeyboardBuilder()
         keyboard.add(InlineKeyboardButton(text=cancel[language], callback_data="cancel_story"))
         await message.answer(messages[language]["request_canceled_story"], reply_markup=keyboard.adjust(1).as_markup())
+
+
+
 
 
 @tale_functions_private_router.callback_query(F.data.startswith("view_top_stories"))
