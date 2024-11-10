@@ -72,16 +72,20 @@ def sent_prompt_and_get_response(msg: str, language: str):
     access_token = get_access_token()
 
     # Создаем сообщение в зависимости от языка
-    if language == "ru":
-        message = f'Сочини для меня одну интересную сказку про {msg}'
-    elif language == "en":
-        message = f'Write an interesting story about {msg} for me'
-    else:
-        message = f'Сочини для меня одну интересную сказку про {msg}'
+    messages = {
+        "ru": f'✨🌈 Сочини для меня волшебную и увлекательную сказку о {msg} 🧚‍♀️🦄, полную приключений, смелых героев и чудесных событий 🌟🌌, с смайликами!',
+        "en": f'✨🌈 Create a magical and captivating story about {msg} 🧚‍♀️🦄, filled with adventures, brave heroes, and wonderful events 🌟🌌!'
+    }
+
+    # Получаем сообщение в зависимости от языка, по умолчанию используется русский
+    message = messages.get(language, messages["ru"])
 
     # Проверка наличия access token
     if access_token:
-        return send_prompt(message, access_token)
+        # Получаем ответ от send_prompt и добавляем смайлики
+        response = send_prompt(message, access_token)
+        decorated_response = f'✨🌟 {response} 🌈🧚‍♂️'
+        return decorated_response
     else:
         return "Не удалось получить access token."
 
