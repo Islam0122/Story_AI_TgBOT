@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton, ReplyKeyboardRemove
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from message_text.text import *
+from message_text.text import button_texts,messages,cancel
 
 
 def start_functions_keyboard(language):
