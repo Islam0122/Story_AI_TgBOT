@@ -85,8 +85,9 @@ async def process_story_text(message: types.Message, state: FSMContext) -> None:
         keyboard = InlineKeyboardBuilder()
         keyboard.add(InlineKeyboardButton(text=messages[language]['listen'], callback_data='listen'))
         keyboard.add(InlineKeyboardButton(text=messages[language]['return_menu'], callback_data='start_'))
-        # generated_story_by_photo =
-        await message.answer(text=f"it is photo", reply_markup=keyboard.adjust(1).as_markup())
+        photo = message.photo[-1]  # Выбираем фото с наибольшим разрешением
+        generated_story_by_photo = sent_prompt_with_photo_and_get_response(photo, language)
+        await message.answer(text=generated_story_by_photo, reply_markup=keyboard.adjust(1).as_markup())
         await state.clear()
     else:
         keyboard = InlineKeyboardBuilder()

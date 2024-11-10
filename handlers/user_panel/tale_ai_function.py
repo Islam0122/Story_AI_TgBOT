@@ -1,10 +1,14 @@
+import base64
 import json
 import os
 import uuid
+from io import BytesIO
+
 import requests
-from aiogram import Bot
+from aiogram import Bot, types
 from dotenv import load_dotenv, find_dotenv
 from requests.auth import HTTPBasicAuth
+
 load_dotenv(find_dotenv())
 
 CLIENT_ID = os.getenv('CLIENT_ID')
@@ -80,3 +84,8 @@ def sent_prompt_and_get_response(msg: str, language: str):
         return send_prompt(message, access_token)
     else:
         return "Не удалось получить access token."
+
+
+def sent_prompt_with_photo_and_get_response(photo, language: str):
+    access_token = get_access_token()
+    return "🚧 Эта команда пока недоступна. Вернитесь в меню /start 😊"
