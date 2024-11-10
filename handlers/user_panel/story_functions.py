@@ -9,7 +9,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from keyboard.inline import start_functions_keyboard, get_cancel_story_keyboard, return_menu_keyboard, \
     return_start_keyboard
-from message_text.text import messages, button_texts, cancel
+from message_text.text import messages, button_texts, cancel, texts
 from .start_functions import user_preferences
 from .tale_ai_function import *
 from filter.chat_types import ChatTypeFilter
@@ -26,11 +26,24 @@ class StoryState(StatesGroup):
 @tale_functions_private_router.callback_query(F.data.startswith("create_story"))
 async def story(query: types.CallbackQuery, state: FSMContext) -> None:
     user_id = query.from_user.id
+    language = user_preferences.get(user_id, {}).get('language', 'ru')  # Получаем предпочитаемый язык пользователя
+    keyboard = InlineKeyboardBuilder()
+    keyboard.add(InlineKeyboardButton(text=texts['by_text'][language], callback_data='create_story_by_text'))
+    keyboard.add(InlineKeyboardButton(text=texts['by_photo'][language], callback_data='create_story_by_photo'))
+    await query.message.edit_text(
+        text=texts['choose_method'][language],
+        reply_markup=keyboard.adjust(1).as_markup()
+    )
+
+
+
+@tale_functions_private_router.callback_query(F.data.startswith("create_story_by_text"))
+async def create_story_by_text(query: types.CallbackQuery, state: FSMContext) -> None:
+    user_id = query.from_user.id
     language = user_preferences.get(user_id, {}).get('language', 'ru')
     await query.message.edit_caption(caption=messages[language]["ask_theme"],
                                      reply_markup=get_cancel_story_keyboard(language))
     await state.set_state(StoryState.story_text)
-
 
 # Отмена создания сказки
 @tale_functions_private_router.callback_query(F.data == "cancel_create_story")
