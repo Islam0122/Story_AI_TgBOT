@@ -99,8 +99,9 @@ def check_answer_get_response(question: str, possible_answers: list, user_answer
     message = (
         f"Вот вопрос: {question}\n"
         f"Вот возможные ответы: {', '.join(possible_answers)}\n"
-        f"А вот что ответил я: {user_answer}\n"
-        f"Проверьте, правильно ли я ответил."
+        f"А вот мой ответ: {user_answer}\n"
+        f"Пожалуйста, проверьте, правильно ли я ответил.\n"
+        f"Оцените мой ответ."
     )
     if access_token:
         try:
