@@ -89,7 +89,26 @@ def sent_prompt_and_get_response(msg: str, language: str):
     else:
         return "Не удалось получить access token."
 
-
 def sent_prompt_with_photo_and_get_response(photo, language: str):
     access_token = get_access_token()
     return "🚧 Эта команда пока недоступна. Вернитесь в меню /start 😊"
+
+
+def check_answer_get_response(question: str, possible_answers: list, user_answer: str):
+    access_token = get_access_token()
+    message = (
+        f"Вот вопрос: {question}\n"
+        f"Вот возможные ответы: {', '.join(possible_answers)}\n"
+        f"А вот что ответил я: {user_answer}\n"
+        f"Проверьте, правильно ли я ответил."
+    )
+    if access_token:
+        try:
+            response = send_prompt(message, access_token)
+            return response
+        except Exception as e:
+            return f"Ошибка при отправке запроса: {str(e)}"
+    else:
+        return "Не удалось получить access token."
+
+

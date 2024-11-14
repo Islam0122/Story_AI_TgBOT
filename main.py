@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from dotenv import find_dotenv, load_dotenv
 
+from handlers.user_panel.chat_bot import chat_bot_functions_private_router
 from handlers.user_panel.feedback_functions import feedback_private_router
 from handlers.user_panel.start_functions import start_functions_private_router
 from handlers.user_panel.story_functions import tale_functions_private_router
@@ -26,7 +27,7 @@ dp = Dispatcher()
 dp.include_router(start_functions_private_router)
 dp.include_router(feedback_private_router)
 dp.include_router(tale_functions_private_router)
-
+dp.include_router(chat_bot_functions_private_router)
 
 async def on_startup(bot):
     await bot.send_message(bot.my_admins_list[0], "Сервер успешно запущен! 😊 Привет, босс!")

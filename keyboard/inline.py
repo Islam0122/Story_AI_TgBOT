@@ -21,6 +21,7 @@ def start_functions_keyboard(language):
 
     keyboard.add(InlineKeyboardButton(text=texts['change_language'], callback_data='change_language'))
 
+    keyboard.add(InlineKeyboardButton(text="Начать задание ", callback_data='chat_bot'))
     return keyboard.adjust(2, 1, 2, 1).as_markup()
 
 
