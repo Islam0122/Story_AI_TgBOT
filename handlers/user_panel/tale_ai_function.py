@@ -73,9 +73,10 @@ def sent_prompt_and_get_response(msg: str, language: str):
 
     # Создаем сообщение в зависимости от языка
     messages = {
-        "ru": f'✨🌈 Сочини для меня волшебную и увлекательную сказку о {msg} 🧚‍♀️🦄, полную приключений, смелых героев и чудесных событий 🌟🌌, с смайликами!',
-        "en": f'✨🌈 Create a magical and captivating story about {msg} 🧚‍♀️🦄, filled with adventures, brave heroes, and wonderful events 🌟🌌!'
-    }
+        "ru": f'✨🌈 Напиши волшебную, увлекательную сказку о {msg} 🧚‍♀️🦄! Пусть она будет полной невероятных '
+              f'приключений, отважных героев и чудесных событий 🌟🌌, и не забудь добавить побольше смайликов! 😍🎉',
+        "en": f'✨🌈 Write a magical and fascinating fairy tale about {msg} 🧚‍♀️🦄! Let it be filled with incredible '
+              f'adventures, brave heroes, and wonderful events 🌟🌌'}
 
     # Получаем сообщение в зависимости от языка, по умолчанию используется русский
     message = messages.get(language, messages["ru"])
@@ -88,6 +89,7 @@ def sent_prompt_and_get_response(msg: str, language: str):
         return decorated_response
     else:
         return "Не удалось получить access token."
+
 
 def sent_prompt_with_photo_and_get_response(photo, language: str):
     access_token = get_access_token()
@@ -111,5 +113,3 @@ def check_answer_get_response(question: str, possible_answers: list, user_answer
             return f"Ошибка при отправке запроса: {str(e)}"
     else:
         return "Не удалось получить access token."
-
-
